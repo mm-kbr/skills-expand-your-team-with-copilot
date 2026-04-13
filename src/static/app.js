@@ -6,13 +6,18 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isDarkMode) {
     document.body.classList.add("dark-mode");
     darkModeToggle.textContent = "☀️";
+    darkModeToggle.setAttribute("aria-label", "Switch to light mode");
+    darkModeToggle.setAttribute("aria-pressed", "true");
     darkModeToggle.title = "Switch to light mode";
   }
 
   darkModeToggle.addEventListener("click", () => {
     const enabled = document.body.classList.toggle("dark-mode");
     darkModeToggle.textContent = enabled ? "☀️" : "🌙";
-    darkModeToggle.title = enabled ? "Switch to light mode" : "Switch to dark mode";
+    const label = enabled ? "Switch to light mode" : "Switch to dark mode";
+    darkModeToggle.setAttribute("aria-label", label);
+    darkModeToggle.setAttribute("aria-pressed", String(enabled));
+    darkModeToggle.title = label;
     localStorage.setItem("darkMode", enabled);
   });
 
