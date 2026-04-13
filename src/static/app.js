@@ -34,6 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
     technology: { label: "Technology", color: "#e8eaf6", textColor: "#3949ab" },
   };
 
+  // Share message prefix for social sharing
+  const SHARE_MESSAGE_PREFIX = "Check out this activity: ";
+
   // State for activities and filters
   let allActivities = {};
   let currentFilter = "all";
@@ -490,6 +493,11 @@ document.addEventListener("DOMContentLoaded", () => {
         button.classList.remove("copied");
         button.textContent = "📋 Copy Link";
       }, 2000);
+    }).catch(() => {
+      button.textContent = "⚠ Copy failed";
+      setTimeout(() => {
+        button.textContent = "📋 Copy Link";
+      }, 2000);
     });
   }
 
@@ -593,7 +601,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="share-buttons">
         <button class="share-button copy-link" data-activity="${name}">📋 Copy Link</button>
         <a class="share-button twitter-share"
-           href="https://twitter.com/intent/tweet?text=${encodeURIComponent("Check out this activity: " + name)}&url=${encodeURIComponent(getShareUrl(name))}"
+           href="https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_MESSAGE_PREFIX + name)}&url=${encodeURIComponent(getShareUrl(name))}"
            target="_blank" rel="noopener noreferrer">🐦 Twitter</a>
         <a class="share-button facebook-share"
            href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(name))}"
