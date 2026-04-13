@@ -472,6 +472,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Build a shareable URL for an activity
+  function getShareUrl(activityName) {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.searchParams.set("activity", activityName);
+    return url.toString();
+  }
+
+  // Copy the activity link to the clipboard and show feedback
+  function copyActivityLink(button, activityName) {
+    const shareUrl = getShareUrl(activityName);
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      button.classList.add("copied");
+      button.textContent = "✔ Copied!";
+      setTimeout(() => {
+        button.classList.remove("copied");
+        button.textContent = "📋 Copy Link";
+      }, 2000);
+    });
+  }
+
   // Function to render a single activity card
   function renderActivityCard(name, details) {
     const activityCard = document.createElement("div");
@@ -569,6 +590,15 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="share-buttons">
+        <button class="share-button copy-link" data-activity="${name}">📋 Copy Link</button>
+        <a class="share-button twitter-share"
+           href="https://twitter.com/intent/tweet?text=${encodeURIComponent("Check out this activity: " + name)}&url=${encodeURIComponent(getShareUrl(name))}"
+           target="_blank" rel="noopener noreferrer">🐦 Twitter</a>
+        <a class="share-button facebook-share"
+           href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(name))}"
+           target="_blank" rel="noopener noreferrer">📘 Facebook</a>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -586,6 +616,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    // Add click handler for copy-link share button
+    const copyLinkButton = activityCard.querySelector(".copy-link");
+    copyLinkButton.addEventListener("click", () => {
+      copyActivityLink(copyLinkButton, name);
+    });
 
     activitiesList.appendChild(activityCard);
   }
